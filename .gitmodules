@@ -1,0 +1,3 @@
+[submodule "vendor/ode"]
+	path = vendor/ode
+	url = https://bitbucket.org/odedevs/ode.git
