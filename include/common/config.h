@@ -53,10 +53,10 @@
 #define HAVE___ISNANF 1
 
 /* compiling for a pentium on a gcc-based platform? */
-#define PENTIUM 1
+// #define PENTIUM 1
 
 /* compiling for a X86_64 system on a gcc-based platform? */
-#define X86_64_SYSTEM 1
+// #define X86_64_SYSTEM 1
 
 /* Try to identify the platform */
 #if defined(_XENON)

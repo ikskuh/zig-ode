@@ -119,8 +119,9 @@ pub fn getPackage(self: *Sdk, name: []const u8, config: Config) std.build.Pkg {
 
 pub fn linkTo(self: *Sdk, target: *std.build.LibExeObjStep, linkage: std.build.LibExeObjStep.Linkage, config: Config) void {
     const lib = self.createCoreLibrary(linkage, config);
-    lib.target = target.target;
-    lib.build_mode = target.build_mode;
+    lib.setTarget(target.target);
+    lib.setBuildMode(target.build_mode);
+    lib.setLibCFile(target.libc_file);
     target.linkLibrary(lib);
     target.linkLibC();
 }
@@ -158,7 +159,7 @@ fn createCoreLibrary(self: *Sdk, linkage: std.build.LibExeObjStep.Linkage, confi
     lib.addIncludePath(sdkPath("/vendor/ode/ou/include"));
 
     // if(APPLE)
-    // 	target_compile_definitions(ODE PRIVATE -DMAC_OS_X_VERSION=${MAC_OS_X_VERSION})
+    //  target_compile_definitions(ODE PRIVATE -DMAC_OS_X_VERSION=${MAC_OS_X_VERSION})
     // endif()
 
     // if(WIN32)
@@ -212,6 +213,10 @@ fn createCoreLibrary(self: *Sdk, linkage: std.build.LibExeObjStep.Linkage, confi
     }
     if (config.no_threading_intf) {
         lib.defineCMacro("dTHREADING_INTF_DISABLED", null);
+    }
+
+    if (config.no_builtin_threading_impl and config.no_threading_intf) {
+        lib.single_threaded = true;
     }
 
     if (config.libccd) |libccd| {
